@@ -1,0 +1,8 @@
+# Dependencies
+/node_modules
+
+# Logs
+*.log
+
+# Jules scratch directory
+/jules-scratch/

@@ -2294,7 +2294,11 @@ async function saveWorkOrder(orderId, updates = {}) {
         const newStatus = orderData.status;
         let workIntervals = existingOrder.workIntervals ? JSON.parse(JSON.stringify(existingOrder.workIntervals)) : [];
 
-        if (newStatus === 'Completado' && orderData.startTime && orderData.endTime) {
+        const hasDetailedIntervals = workIntervals.length > 0;
+
+        // Only calculate a single, simple interval from form dates if no detailed intervals exist.
+        // This protects timer data from being overwritten by a simple form save.
+        if (!hasDetailedIntervals && newStatus === 'Completado' && orderData.startTime && orderData.endTime) {
             const start = new Date(orderData.startTime);
             const end = new Date(orderData.endTime);
             if (end > start) {
