@@ -815,7 +815,7 @@ function createPartRowHTML(part) {
         <td>${part.id}</td><td>${part.description}</td>
         <td><span class="badge bg-${part.classification === 'insumo' ? 'info' : 'secondary'}">${classificationText}</span></td>
         <td>${supplier ? supplier.nombre : 'N/A'}</td>
-        <td>${machineNames}</td><td>$${part.cost.toFixed(2)}</td><td>${part.stock}</td>
+        <td>${machineNames}</td><td>Lps ${part.cost.toFixed(2)}</td><td>${part.stock}</td>
         <td>${part.minStock}</td><td>${part.location || 'N/A'}</td>
         <td class="text-center">${actionsHTML}</td>
     `;
@@ -2741,7 +2741,7 @@ function generateGeneralReport() {
         doc.autoTable({
             startY: finalY + 25,
             head: [['ID', 'Descripción', 'Stock', 'Costo Unitario']],
-            body: state.parts.map(p => [p.id, p.description, p.stock, `$${p.cost.toFixed(2)}`]),
+            body: state.parts.map(p => [p.id, p.description, p.stock, `Lps ${p.cost.toFixed(2)}`]),
              headStyles: { fillColor: [44, 62, 80] },
         });
 
