@@ -1533,7 +1533,7 @@ function renderSolicitudes() {
 
 
     if (userSolicitudes.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center">No ha realizado ninguna solicitud.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center">No ha realizado ninguna solicitud.</td></tr>';
         return;
     }
 
@@ -1585,6 +1585,7 @@ function renderSolicitudes() {
 
         tr.innerHTML = `
             <td>${solicitud.id}</td>
+            <td>${solicitud.requester}</td>
             <td>${machine.name}</td>
             <td>${solicitud.description}</td>
             <td>${new Date(solicitud.createdAt).toLocaleDateString('es-ES')}</td>
@@ -1598,7 +1599,22 @@ function showSolicitudModal() {
     document.getElementById('solicitud-form').reset();
     const machineSelect = document.getElementById('solicitud-machine');
     machineSelect.innerHTML = '<option value="">Seleccione una máquina...</option>';
-    state.machines.forEach(m => machineSelect.innerHTML += `<option value="${m.id}">${m.name}</option>`);
+
+    let machinesToShow = [];
+    if (state.currentUser) {
+        // Los administradores o invitados pueden ver todas las máquinas.
+        if (state.currentUser.role === 'Admin' || state.currentUser.role === 'Invitado') {
+            machinesToShow = state.machines;
+        }
+        // Los usuarios con máquinas asignadas (Jefe de Area, Operario, etc.) solo ven las suyas.
+        else if (Array.isArray(state.currentUser.managedMachineIds)) {
+            const assignedIds = new Set(state.currentUser.managedMachineIds);
+            machinesToShow = state.machines.filter(m => assignedIds.has(m.id));
+        }
+        // Si un usuario no es Admin y no tiene máquinas asignadas, la lista estará vacía como medida de seguridad.
+    }
+
+    machinesToShow.forEach(m => machineSelect.innerHTML += `<option value="${m.id}">${m.name}</option>`);
     state.modals.solicitud.show();
 }
 
