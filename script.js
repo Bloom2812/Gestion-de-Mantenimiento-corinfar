@@ -1533,7 +1533,7 @@ function renderSolicitudes() {
 
 
     if (userSolicitudes.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center">No ha realizado ninguna solicitud.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center">No ha realizado ninguna solicitud.</td></tr>';
         return;
     }
 
@@ -1585,6 +1585,7 @@ function renderSolicitudes() {
 
         tr.innerHTML = `
             <td>${solicitud.id}</td>
+            <td>${solicitud.requester}</td>
             <td>${machine.name}</td>
             <td>${solicitud.description}</td>
             <td>${new Date(solicitud.createdAt).toLocaleDateString('es-ES')}</td>
