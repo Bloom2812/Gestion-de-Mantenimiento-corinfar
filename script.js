@@ -763,6 +763,19 @@ function initCharts() {
         },
         options: { ...chartOptions, plugins: { ...chartOptions.plugins, title: { display: true, text: 'Tendencia Mensual (Últimos 12 Meses)' }}}
     });
+
+    state.charts.areaComparison = new Chart(document.getElementById('areaComparisonChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Instalaciones Eléctricas', 'Áreas de Producción'],
+            datasets: [{
+                label: 'Total de Órdenes de Trabajo',
+                data: [0, 0],
+                backgroundColor: ['#2980b9', '#27ae60'],
+            }]
+        },
+        options: { ...chartOptions, plugins: { ...chartOptions.plugins, title: { display: true, text: 'Órdenes por Área General' }}}
+    });
 }
 
 // --- NEW: Generic function to remove a table row by ID ---
@@ -3591,6 +3604,12 @@ function updateCharts(ordersForPeriod) {
     state.charts.correctiveTrends.data.datasets[0].data = preventiveCounts;
     state.charts.correctiveTrends.data.datasets[1].data = correctiveCounts;
     state.charts.correctiveTrends.update();
+
+    // Update Area Comparison Chart
+    const electricasCount = ordersForPeriod.filter(o => o.machineId === 'IN-EPSL-001').length;
+    const produccionCount = ordersForPeriod.filter(o => o.machineId === 'AR-PRDC-001').length;
+    state.charts.areaComparison.data.datasets[0].data = [electricasCount, produccionCount];
+    state.charts.areaComparison.update();
 }
 
 function populateWorkOrderSelectors() {
