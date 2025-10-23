@@ -2160,7 +2160,7 @@ function renderCalendar() {
         tasksForDay.forEach(task => {
             const taskEl = document.createElement('div');
             taskEl.className = `calendar-task task-${task.type}`;
-            if (task.estado === 'terminada') {
+            if (task.estado === 'terminada' || task.status === 'Completado') {
                 taskEl.innerHTML = `<i class="fas fa-star text-warning me-1"></i>${task.id}`;
             } else {
                 taskEl.textContent = task.id;
