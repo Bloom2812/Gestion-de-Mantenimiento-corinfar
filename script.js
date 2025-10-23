@@ -2160,7 +2160,11 @@ function renderCalendar() {
         tasksForDay.forEach(task => {
             const taskEl = document.createElement('div');
             taskEl.className = `calendar-task task-${task.type}`;
-            taskEl.textContent = task.id;
+            if (task.estado === 'terminada') {
+                taskEl.innerHTML = `<i class="fas fa-star text-warning me-1"></i>${task.id}`;
+            } else {
+                taskEl.textContent = task.id;
+            }
             taskEl.dataset.id = task.id;
             
             taskEl.setAttribute('data-bs-toggle', 'popover');
@@ -2289,6 +2293,13 @@ async function saveWorkOrder(orderId, updates = {}) {
         
         const existingOrder = isNew ? {} : state.workOrders.find(wo => wo.id === orderId) || {};
         const orderData = { ...existingOrder, ...formData, ...updates };
+
+        if (isNew) {
+            orderData.estado = 'planificada';
+        }
+        if (orderData.status === 'Completado') {
+            orderData.estado = 'terminada';
+        }
         
         const oldStatus = existingOrder.status;
         const newStatus = orderData.status;
