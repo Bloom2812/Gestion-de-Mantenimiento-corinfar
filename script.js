@@ -2329,8 +2329,20 @@ async function saveWorkOrder(orderId, updates = {}) {
                 orderData.workIntervals = [{ start: start.toISOString(), end: end.toISOString() }];
             }
         } else if (newStatus !== oldStatus) {
+            const now = new Date(); // Consistent timestamp for status change logic
+
+            // Set actual start date on first transition to 'In Process'
+            if (newStatus === 'En Proceso' && oldStatus === 'Pendiente') {
+                orderData.fechaInicio = now.toISOString();
+            }
+
+            // Set actual end date on first transition to 'Completed'
+            if (newStatus === 'Completado' && oldStatus !== 'Completado') {
+                orderData.fechaFinalizacion = now.toISOString();
+            }
+
             if (newStatus === 'En Proceso' && oldStatus !== 'En Proceso') {
-                let intervalStart = new Date();
+                let intervalStart = now;
                 if (!workIntervals.some(i => !i.end) && orderData.startTime) {
                     const manualStart = new Date(orderData.startTime);
                     if (manualStart <= intervalStart) {
@@ -2341,7 +2353,7 @@ async function saveWorkOrder(orderId, updates = {}) {
             } else if (['Pausado', 'Completado'].includes(newStatus) && oldStatus === 'En Proceso') {
                 const lastInterval = workIntervals.find(i => !i.end);
                 if (lastInterval) {
-                    lastInterval.end = new Date().toISOString();
+                    lastInterval.end = now.toISOString();
                 }
             }
             orderData.workIntervals = workIntervals;
@@ -2434,10 +2446,9 @@ async function handleWorkOrderAction(orderId, newStatus) {
                 return;
             }
             
-            // If starting for the very first time, also update the main start date/time
+            // If starting for the very first time, set the actual start date
             if (order.status === 'Pendiente') {
-                updates.startTime = now.toISOString();
-                updates.date = now.toISOString().split('T')[0];
+                updates.fechaInicio = now.toISOString();
             }
 
             workIntervals.push({ start: now.toISOString() });
@@ -2448,6 +2459,7 @@ async function handleWorkOrderAction(orderId, newStatus) {
             }
             if (newStatus === 'Completado' && !order.endTime) {
                 updates.endTime = now.toISOString();
+                updates.fechaFinalizacion = now.toISOString();
             }
         }
         updates.workIntervals = workIntervals;
@@ -2564,6 +2576,27 @@ function showWorkOrderModal(orderId = null, type = 'Preventivo', sourceSolicitud
             if(order.partsUsed) {
                 order.partsUsed.forEach(part => addPartToWorkOrder(part.partId, part.quantity, true));
             }
+
+            // --- NEW: Populate read-only actual date and time fields ---
+            const actualStartDate = order.fechaInicio ? new Date(order.fechaInicio) : null;
+            const actualEndDate = order.fechaFinalizacion ? new Date(order.fechaFinalizacion) : null;
+
+            if (actualStartDate) {
+                document.getElementById('wo-actual-start-date').value = `${actualStartDate.toLocaleDateString('es-ES')} ${actualStartDate.toLocaleTimeString('es-ES')}`;
+            } else {
+                document.getElementById('wo-actual-start-date').value = 'N/A';
+            }
+
+            if (actualEndDate) {
+                document.getElementById('wo-actual-end-date').value = `${actualEndDate.toLocaleDateString('es-ES')} ${actualEndDate.toLocaleTimeString('es-ES')}`;
+            } else {
+                document.getElementById('wo-actual-end-date').value = 'N/A';
+            }
+
+            const totalMs = getTotalWorkDurationMs(order);
+            const hours = Math.floor(totalMs / (1000 * 60 * 60));
+            const minutes = Math.floor((totalMs % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('wo-total-time').value = `${hours}h ${minutes}m`;
         }
     } else {
         document.getElementById('work-order-modal-title').textContent = sourceSolicitud ? `Nueva OT desde Solicitud` : `Nueva Orden ${type}`;
