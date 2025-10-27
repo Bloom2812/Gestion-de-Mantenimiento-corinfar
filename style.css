@@ -1,21 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
 :root {
-    --primary-color: #3498db;
-    --secondary-color: #2c3e50;
-    --sidebar-bg: #2c3e50;
-    --sidebar-text: #ecf0f1;
-    --sidebar-active-bg: #34495e;
-    --content-bg: #f4f7f9;
-    --card-bg: #ffffff;
-    --text-color: #34495e;
+    --primary-color: #4A90E2; /* Un azul más moderno */
+    --secondary-color: #34495E; /* Un gris azulado oscuro */
+    --sidebar-bg: #2C3E50; /* Un azul marino oscuro y profundo */
+    --sidebar-text: #BDC3C7; /* Un gris claro para el texto */
+    --sidebar-active-bg: #34495E; /* Un gris azulado para el elemento activo */
+    --content-bg: #ECF0F1; /* Un fondo gris muy claro */
+    --card-bg: #FFFFFF;
+    --text-color: #34495E;
     --bs-primary: var(--primary-color);
     --bs-secondary: var(--secondary-color);
+    --success-color: #2ECC71;
+    --danger-color: #E74C3C;
+    --warning-color: #F39C12;
 }
 
 body {
     background-color: var(--content-bg);
     color: var(--text-color);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Roboto', sans-serif; /* Tipografía más estándar y legible */
     overflow-x: hidden;
+    font-size: 16px; /* Mejorar legibilidad base */
 }
 
 /* --- Login Overlay --- */
@@ -122,10 +128,10 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     border-radius: 6px;
 }
-.toast-success { border-left-color: #28a745; }
-.toast-error { border-left-color: #dc3545; }
-.toast-warning { border-left-color: #ffc107; }
-.toast-info { border-left-color: #17a2b8; }
+.toast-success { border-left-color: var(--success-color); }
+.toast-error { border-left-color: var(--danger-color); }
+.toast-warning { border-left-color: var(--warning-color); }
+.toast-info { border-left-color: var(--primary-color); }
 
 /* Loading indicator */
 .loading-overlay {
@@ -162,107 +168,117 @@ body {
 
 /* --- Sidebar --- */
 .sidebar {
-    width: 260px;
+    width: 250px; /* Reducir ligeramente el ancho */
     background-color: var(--sidebar-bg);
     color: var(--sidebar-text);
-    padding: 1.5rem 0;
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    border-right: 1px solid #3e5265; /* Borde sutil */
     flex-shrink: 0;
 }
 
 .sidebar-header {
-    padding: 0 1.5rem 1.5rem;
-    text-align: center;
-    border-bottom: 1px solid #4a627a;
+    padding: 1.5rem; /* Padding consistente */
+    text-align: left; /* Alinear a la izquierda */
     position: relative;
+    border-bottom: 1px solid #3e5265;
 }
 
 .sidebar-header .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.4rem;
+    font-weight: 700; /* Más grueso */
+    color: #FFF; /* Blanco para destacar */
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 .connection-status {
     position: absolute;
-    top: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     right: 15px;
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background-color: #28a745;
+    background-color: var(--success-color);
     transition: background-color 0.3s ease;
     border: 2px solid var(--sidebar-bg);
 }
 
 .connection-status.offline {
-    background-color: #dc3545;
+    background-color: var(--danger-color);
 }
 
 .connection-status.syncing {
-    background-color: #ffc107;
+    background-color: var(--warning-color);
     animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
+    0% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(243, 156, 18, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0); }
 }
 
 .sidebar-nav {
     flex-grow: 1;
-    padding: 1rem 0;
+    padding: 0.5rem 0; /* Reducir padding vertical */
 }
 
 .nav-tab {
     display: flex;
     align-items: center;
-    padding: 1rem 1.5rem;
+    padding: 0.8rem 1.5rem; /* Ajustar padding */
+    margin: 0.2rem 0.75rem; /* Margen para efecto "píldora" */
     color: var(--sidebar-text);
     text-decoration: none;
     transition: all 0.2s ease;
-    border-left: 4px solid transparent;
+    border-radius: 6px; /* Bordes redondeados */
+    border-left: none; /* Eliminar borde izquierdo */
+    font-weight: 500;
 }
 
 .nav-tab:hover {
     background-color: var(--sidebar-active-bg);
-    border-left-color: var(--primary-color);
+    color: #FFF; /* Texto blanco al pasar el ratón */
 }
 
 .nav-tab.active {
-    background-color: var(--sidebar-active-bg);
-    border-left-color: var(--primary-color);
+    background-color: var(--primary-color); /* Usar color primario para activo */
+    color: #FFF;
+    font-weight: 700;
 }
 
 .nav-tab i {
     margin-right: 1rem;
     width: 20px;
     text-align: center;
+    font-size: 0.9rem; /* Iconos ligeramente más pequeños */
 }
 
 .user-profile {
-    padding: 1.5rem;
-    border-top: 1px solid #4a627a;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #3e5265;
     display: flex;
     align-items: center;
+    background-color: rgba(0,0,0,0.1); /* Fondo sutil */
 }
 
 .user-profile img {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    margin-right: 1rem;
+    margin-right: 0.75rem;
     border: 2px solid var(--primary-color);
 }
 
 .user-info {
     flex-grow: 1;
+    line-height: 1.2;
+}
+.user-info small {
+    opacity: 0.7;
 }
 
 /* --- Main Content --- */
@@ -279,8 +295,8 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 1.5rem; /* Más espacio */
+    border-bottom: 1px solid #D6DBDF; /* Borde más suave */
 }
 
 #sidebar-toggle {
@@ -307,16 +323,16 @@ body {
 }
 
 .card {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid #D6DBDF; /* Borde sutil */
+    border-radius: 8px; /* Borde ligeramente menos redondeado */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra más suave */
     margin-bottom: 1.5rem;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sombra ligeramente más pronunciada al pasar el ratón */
 }
 
 .stat-card {
@@ -341,26 +357,70 @@ body {
 
 .table-responsive {
     background: var(--card-bg);
-    padding: 1.5rem;
-    border-radius: 10px;
-    overflow-x: auto;
+    padding: 0; /* Padding will be on the table itself */
+    border-radius: 8px;
+    overflow: hidden; /* Hide overflowing content from rounded corners */
+    border: 1px solid #D6DBDF;
+}
+
+.table {
+    margin-bottom: 0; /* Remove default bootstrap margin */
+}
+
+.table thead {
+    background-color: #F8F9F9;
+    border-bottom: 2px solid #D6DBDF;
+}
+
+.table th {
+    font-weight: 500;
+    color: var(--secondary-color);
+    padding: 1rem 1.5rem;
+    border-top: none;
+}
+
+.table td {
+    padding: 1rem 1.5rem;
+    vertical-align: middle;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: #F2F4F4;
 }
 
 .modal .modal-content {
-    border-radius: 10px;
-    border: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border-radius: 8px; /* Coincidir con el radio de las tarjetas */
+    border: 1px solid #D6DBDF;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .modal-header {
-    background: var(--primary-color);
-    color: white;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    background: #F8F9F9; /* Fondo claro y limpio */
+    color: var(--secondary-color); /* Texto oscuro */
+    border-bottom: 1px solid #D6DBDF;
+    padding: 1rem 1.5rem;
+}
+
+.modal-title {
+    font-weight: 500;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    background-color: #F8F9F9;
+    border-top: 1px solid #D6DBDF;
+    padding: 0.75rem 1.5rem;
 }
 
 .modal-header .btn-close {
-    filter: invert(1);
+    filter: none; /* Eliminar el filtro de inversión */
+    opacity: 0.7;
+}
+.modal-header .btn-close:hover {
+    opacity: 1;
 }
 
 /* --- Calendar Styles --- */
@@ -404,37 +464,55 @@ body {
 }
 .calendar-task:hover {
     transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-.task-Preventivo { background-color: #eaf2f8; color: #2980b9; border-left: 3px solid #3498db; }
-.task-Correctivo { background-color: #f9ebea; color: #c0392b; border-left: 3px solid #e74c3c; }
+.task-Preventivo {
+    background-color: rgba(74, 144, 226, 0.1);
+    color: #3a7bd5;
+    border-left: 3px solid var(--primary-color);
+}
+.task-Correctivo {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #c0392b;
+    border-left: 3px solid var(--danger-color);
+}
 
 /* --- Kanban Board Styles --- */
 .kanban-board {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsive columns */
+    gap: 1.5rem;
 }
 .kanban-column {
-    background-color: #f1f2f6;
-    border-radius: 5px;
-    padding: 1rem;
-    min-height: 70vh;
-    max-height: 70vh;
+    background-color: #EAECEE; /* Tono de gris más suave */
+    border-radius: 8px;
+    padding: 0.5rem;
+    min-height: 75vh;
+    max-height: 75vh;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.kanban-column .card-header {
+    border-radius: 6px 6px 0 0;
+}
+.kanban-column .card-body {
+    padding: 0.75rem;
 }
 
 .kanban-card {
     background-color: #fff;
-    border-radius: 5px;
-    padding: 1rem;
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
     margin-bottom: 1rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border: 1px solid #D6DBDF;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .kanban-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-3px);
 }
 
 .kanban-card .card-title {
@@ -555,21 +633,21 @@ body {
     .table-responsive table {
         font-size: 0.875rem;
     }
-    
+
     .table-responsive th,
     .table-responsive td {
         padding: 0.5rem;
     }
-    
+
     .btn-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.75rem;
     }
-    
+
     .kanban-board {
         grid-template-columns: 1fr;
     }
-    
+
     .kanban-column {
         min-height: 40vh;
         max-height: 40vh;
@@ -581,15 +659,15 @@ body {
     .login-container {
         width: 95%;
     }
-    
+
     .card-body {
         padding: 1rem;
     }
-    
+
     .modal-dialog {
         margin: 0.5rem;
     }
-    
+
     .modal-content {
         border-radius: 0.5rem;
     }
