@@ -2582,15 +2582,19 @@ function showWorkOrderModal(orderId = null, type = 'Preventivo', sourceSolicitud
             const actualEndDate = order.fechaFinalizacion ? new Date(order.fechaFinalizacion) : null;
 
             if (actualStartDate) {
-                document.getElementById('wo-actual-start-date').value = `${actualStartDate.toLocaleDateString('es-ES')} ${actualStartDate.toLocaleTimeString('es-ES')}`;
+                document.getElementById('wo-actual-start-date').value = actualStartDate.toLocaleDateString('es-ES');
+                document.getElementById('wo-actual-start-time').value = actualStartDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
             } else {
                 document.getElementById('wo-actual-start-date').value = 'N/A';
+                document.getElementById('wo-actual-start-time').value = 'N/A';
             }
 
             if (actualEndDate) {
-                document.getElementById('wo-actual-end-date').value = `${actualEndDate.toLocaleDateString('es-ES')} ${actualEndDate.toLocaleTimeString('es-ES')}`;
+                document.getElementById('wo-actual-end-date').value = actualEndDate.toLocaleDateString('es-ES');
+                document.getElementById('wo-actual-end-time').value = actualEndDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
             } else {
                 document.getElementById('wo-actual-end-date').value = 'N/A';
+                document.getElementById('wo-actual-end-time').value = 'N/A';
             }
 
             const totalMs = getTotalWorkDurationMs(order);
